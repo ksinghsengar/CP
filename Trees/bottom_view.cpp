@@ -16,32 +16,31 @@ struct Node
     }
 }; */
 
-void bottomViewUtil(Node* node, int current_level, int hd, map<int , pair<int, int> > *mp){
+void bottomViewUtil(Node* node, int current_level, int horizontal_distance, map<int , pair<int, int> > *mp){
     if(node == NULL){
         return;
     }
     
-    auto it = (*mp).find(hd);
+    auto it = (*mp).find(horizontal_distance);
     
     if(it != (*mp).end() && it->second.second <= current_level){
         it->second.first =  node->data;
         it->second.second =  current_level;
     }
     else {
-        (*mp).insert({hd, {node->data, current_level}});
+        (*mp).insert({horizontal_distance, {node->data, current_level}});
     }
     
-    bottomViewUtil(node->left, current_level+1, hd-1, mp);
-    bottomViewUtil(node->right, current_level+1, hd+1, mp);
+    bottomViewUtil(node->left, current_level+1, horizontal_distance-1, mp);
+    bottomViewUtil(node->right, current_level+1, horizontal_distance+1, mp);
 }
 // Method that returns the bottom view.
 vector <int> bottomView(Node *root)
 {
    // Your Code Here
-   int root_level = 0;
    map<int,pair<int,int>> mp;
    vector<int> v;
-   bottomViewUtil(root, root_level, root_level, &mp);
+   bottomViewUtil(root, 0, 0, &mp);
    for(auto data : mp){
       v.push_back(data.second.first);
    }
